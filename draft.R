@@ -36,8 +36,7 @@ for (i in 1:nrow(out_df)){
 
 write.csv(out_df, "~/dropbox/research/ngsschat/out_df.csv")
 
-# function for handling links without http by pasting new link
-
+# function for handling broken links by pasting new link
 http_func <- function(my_var){ 
       out <- tryCatch({
             temp_link <- my_var # gets links
@@ -52,8 +51,7 @@ http_func <- function(my_var){
       return(out)
 }
 
-# function for handling broken links by adding NA instead of text to row
-
+# function for handling dead links by adding NA instead of text to row
 missing_func <- function(temp_link){ 
       out <- tryCatch({
             temp_vec <- read_html(temp_link)
@@ -80,8 +78,8 @@ for (i in 1:nrow(out_df)){ # this iterates through the storifies
       out_username <- list() # for output for username
       
       for (j in 1:length(temp_urls_to_process)){ # this selects one page of one storify
-            temp_dat <- fromJSON(temp_urls_to_process[1])
-            temp_link <- http_func(temp_dat$content$elements$permalink)
+            temp_dat <- fromJSON(temp_urls_to_process[1]) # loads JSON file
+            temp_link <- http_func(temp_dat$content$elements$permalink) # checks that links are not broken
             my_output_vec <- vector(length = length(temp_link)) # makes vector for text output for page
            
             for (k in 1:length(my_output_vec)){ # this processes one page of one storify
