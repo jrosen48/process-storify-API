@@ -11,22 +11,23 @@ library(jsonlite)
 # 2. getting urls and parsing storifies
 #-----------------------
 
+# scrapes page to generate vector of storify urls
 urls <- read_html("https://ngsschat.wikispaces.com/") %>% 
-            html_nodes("a") %>%
-            html_attr("href")
+            html_nodes("a") %>% 
+            html_attr("href") 
 
-tmp_index <- grep("storify", urls)
-storify_urls_all <- urls[tmp_index]
-storify_urls <- str_split(storify_urls_all, "/")
+tmp_index <- grep("storify", urls) # creates index of urls
+storify_urls_all <- urls[tmp_index] # uses index to select only storify urls
+storify_urls <- str_split(storify_urls_all, "/") # prettifies urls
 
 out_df <- data.frame(url = storify_urls_all)
 for (i in 1:nrow(out_df)){
       out_df$api_url[i] <- paste0("https://api.storify.com/v1/stories/", storify_urls[[i]][4], "/", storify_urls[[i]][5]) # makes a url
-      temp_dat <- fromJSON(out_df$api_url[i], simplifyDataFrame = T) 
+      temp_dat <- fromJSON(out_df$api_url[i], simplifyDataFrame = T)  # makes a data frame 
       out_df$num_tweets[i] <- temp_dat$content$stats$elements$quote # number of tweets in story
       out_df$n_pages[i] <- ceiling(out_df$num_tweets[i] / 50) # number of pages, to be used later
-      out_df$date[i] <- str_split(temp_dat$content$date$created, "T")[[1]][1]
-      print(paste0("Processed Storify ", i, " from ", out_df$date[i], " with ", out_df$num_tweets[i], " tweets"))
+      out_df$date[i] <- str_split(temp_dat$content$date$created, "T")[[1]][1] # adds date storify was created
+      print(paste0("Processed Storify ", i, " from ", out_df$date[i], " with ", out_df$num_tweets[i], " tweets")) 
 }
 
 #-----------------------
