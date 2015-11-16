@@ -6,7 +6,7 @@
 library(rvest)
 library(stringr)
 library(jsonlite)
-
+b
 #-----------------------
 # 2. getting urls and parsing storifies
 #-----------------------
@@ -52,7 +52,7 @@ http_func <- function(my_var){
       return(out)
 }
 
-# function for handling broken links my adding NA to tweet row
+# function for handling broken links by adding NA instead of text to row
 
 missing_func <- function(temp_link){ 
       out <- tryCatch({
