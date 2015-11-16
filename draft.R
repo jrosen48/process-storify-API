@@ -31,7 +31,7 @@ for (i in 1:nrow(out_df)){
 }
 
 #-----------------------
-# 3. processing tweets from storifies
+# 3. processing text from storifies
 #-----------------------
 
 write.csv(out_df, "~/dropbox/research/ngsschat/out_df.csv")
