@@ -6,7 +6,7 @@
 library(rvest)
 library(stringr)
 library(jsonlite)
-b
+
 #-----------------------
 # 2. getting urls and parsing storifies
 #-----------------------
