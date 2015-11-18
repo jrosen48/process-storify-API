@@ -2,7 +2,7 @@
 # 1. setting up
 #-----------------------
 
-setwd("~/Dropbox/research/ngsschat") # change to local dir
+setwd("~") # change to local dir
 
 options(stringsAsFactors = F)
 
@@ -13,18 +13,14 @@ library(stringr)
 library(jsonlite)
 library(httr)
 library(lubridate)
-# library(plyr) # careful (this often masks other functions so plyr::func() is used instead)
+
+# library(plyr) plyr often masks other functions so plyr::func() is used instead)
 
 #-----------------------
 # 2. getting urls and parsing storifies # need to check how comprehensive the chats are!!!
 #-----------------------
 
-urls <- read_html("https://ngsschat.wikispaces.com/") %>% # this is a wiki with links to the 51 storifies
-      html_nodes("a") %>% # gets all anchor tags
-      html_attr("href") # gets all links
-
-tmp_index <- grep("storify", urls)
-storify_urls_all <- urls[tmp_index]
+storify_urls_all <- c("") # takes a character vector of storify urls
 
 out_df <- data.frame(url = storify_urls_all)
 
@@ -39,7 +35,7 @@ for (i in 1:nrow(out_df)){
       print(paste0("Processed Storify ", i, " from ", out_df$date[i], " with ", out_df$num_tweets[i], " tweets"))
 }
 
-# write.csv(out_df, "~/dropbox/research/ngsschat/storify-meta.csv") to save out_df
+# write.csv(out_df, "") to save out_df
 
 #-----------------------
 # 3. processing tweets from storifies
@@ -101,12 +97,12 @@ for (i in (1:nrow(out_df))){ # for testing
       }
       
       out_data <- data.frame(time = .POSIXct(unlist(out_time)), username = unlist(out_username), text = unlist(out_text))
-      write.csv(out_data, paste0("~/dropbox/research/ngsschat/storify-data", "/", i, ".csv"), row.names = F) # change to local dir
+      write.csv(out_data, paste0("~", "/", i, ".csv"), row.names = F) # change to local dir
 }
 
 # Merging files
 
-file_names <- dir("~/dropbox/research/ngsschat/storify-data", pattern =".csv") # # change to local dir
+file_names <- dir("~", pattern =".csv") # # change to local dir
 out_ls <- list()
 for (i in 1:length(file_names)){
       out_ls[[i]] <- read.csv(paste0("storify-data/", file_names[i]), header = T, stringsAsFactors = F)
